@@ -1,10 +1,27 @@
 from typing import Any, List
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, status
 
 from app import schemas
 
 router = APIRouter()
+
+users = [
+    schemas.User(
+        id=1,
+        email="martin.fowler@geeky.eu",
+        is_active=True,
+        is_superuser=True,
+        full_name="Martin Fowler",
+    ),
+    schemas.User(
+        id=2,
+        email="uncle.bob@geeky.eu",
+        is_active=False,
+        is_superuser=True,
+        full_name="Uncle Bob",
+    ),
+]
 
 
 @router.get("/", response_model=List[schemas.User])
@@ -15,7 +32,6 @@ def read_users(
     """
     Retrieve users.
     """
-    users = []
     return users
 
 
@@ -27,13 +43,15 @@ def create_user(
     """
     Create new user.
     """
-    user = None
-    if user:
-        raise HTTPException(
-            status_code=400,
-            detail="The user with this username already exists in the system.",
-        )
-    user = None
+    next_user_id = users[-1].id + 1
+    user = schemas.User(
+        id=next_user_id,
+        email=user_in.email,
+        is_active=user_in.is_active,
+        is_superuser=user_in.is_superuser,
+        full_name=user_in.full_name,
+    )
+    users.append(user)
     return user
 
 
@@ -44,7 +62,12 @@ def read_user_by_id(
     """
     Get a specific user by id.
     """
-    user = None
+    user = next((usr for usr in users if usr.id == user_id), None)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User with id={user_id} doesn't exist",
+        )
     return user
 
 
