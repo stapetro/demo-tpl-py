@@ -46,7 +46,7 @@ def create_user(
     """
     Create new user.
     """
-    next_user_id = users[-1].id + 1
+    next_user_id = users[-1].id + 1  # type: ignore
     user = schemas.User(
         id=next_user_id,
         email=user_in.email,
