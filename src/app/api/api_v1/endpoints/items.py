@@ -70,7 +70,7 @@ def update_item(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Item with id={item_id} doesn't exist",
         )
-    item.title = item_in.title
+    item.title = item_in.title  # type: ignore
     item.description = item_in.description
     return item
 
