@@ -11,8 +11,7 @@ profile = "black"
 extension-pkg-whitelist = ["pydantic"]
 fail-under = "9"
 ignore = [
-    "cli.py",
-    "cli_profile.py"
+    "config.py"
 ]
 
 [tool.pylint.format]
