@@ -1,9 +1,11 @@
 import random
 import string
+from datetime import timedelta
 from typing import Dict
 
 from fastapi.testclient import TestClient
 
+from app.core import security
 from app.core.config import settings
 
 
@@ -16,12 +18,8 @@ def random_email() -> str:
 
 
 def get_superuser_token_headers(client: TestClient) -> Dict[str, str]:
-    login_data = {
-        "username": settings.FIRST_SUPERUSER,
-        "password": settings.FIRST_SUPERUSER_PASSWORD,
-    }
-    r = client.post(f"{settings.API_V1_STR}/login/access-token", data=login_data)
-    tokens = r.json()
-    a_token = tokens["access_token"]
+    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    user_id = -1
+    a_token = security.create_access_token(user_id, expires_delta=access_token_expires)
     headers = {"Authorization": f"Bearer {a_token}"}
     return headers
