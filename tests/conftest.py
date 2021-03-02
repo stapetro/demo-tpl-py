@@ -1,10 +1,10 @@
-from typing import Generator, Dict
+from typing import Dict, Generator
 
 import pytest
 from fastapi.testclient import TestClient
+from utils.utils import get_superuser_token_headers
 
 from app.main import app
-from utils.utils import get_superuser_token_headers
 
 
 @pytest.fixture(scope="module")

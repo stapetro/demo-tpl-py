@@ -1,8 +1,10 @@
+import pytest
 from fastapi.testclient import TestClient
 
 from app.core.config import settings
 
 
+@pytest.mark.unit
 def test_create_item(client: TestClient, superuser_token_headers: dict) -> None:
     data = {"title": "Foo", "description": "Fighters"}
     response = client.post(
@@ -18,6 +20,7 @@ def test_create_item(client: TestClient, superuser_token_headers: dict) -> None:
     assert "owner_id" in content
 
 
+@pytest.mark.unit
 def test_read_item(client: TestClient, superuser_token_headers: dict) -> None:
     item_id = 1
     response = client.get(
