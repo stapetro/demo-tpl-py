@@ -1,3 +1,6 @@
+"""
+Security-related utilities
+"""
 from datetime import datetime, timedelta
 from typing import Any, Union
 
@@ -15,6 +18,11 @@ ALGORITHM = "HS256"
 def create_access_token(
     subject: Union[str, Any], expires_delta: timedelta = None
 ) -> str:
+    """
+    :param subject: Represents user or system
+    :param expires_delta: Expiration duration
+    :return: Encoded JWT
+    """
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
@@ -27,8 +35,19 @@ def create_access_token(
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """
+    Validates password.
+    :param plain_password: Plain password
+    :param hashed_password: Hasshed password
+    :return: True when correct, False - otherwise.
+    """
     return pwd_context.verify(plain_password, hashed_password)
 
 
 def get_password_hash(password: str) -> str:
+    """
+    Gets hashed version of a particular password.
+    :param password: Plain password
+    :return: Hashed password
+    """
     return pwd_context.hash(password)

@@ -1,3 +1,4 @@
+# pylint: disable=missing-module-docstring,missing-class-docstring,missing-function-docstring
 import pytest
 from fastapi import status
 from fastapi.testclient import TestClient
@@ -9,12 +10,12 @@ from app.core.config import settings
 @pytest.mark.unit
 class TestUsersApi:
     def test_create_user_new_email(
-        self, client: TestClient, superuser_token_headers: dict
+        self, api_client, superuser_token_headers: dict
     ) -> None:
         username = random_email()
         password = random_lower_string()
         data = {"email": username, "password": password}
-        r = client.post(
+        r = api_client.post(
             f"{settings.API_V1_STR}/users/",
             headers=superuser_token_headers,
             json=data,
@@ -24,11 +25,9 @@ class TestUsersApi:
         assert created_user
         assert created_user["email"] == data["email"]
 
-    def test_get_existing_user(
-        self, client: TestClient, superuser_token_headers: dict
-    ) -> None:
+    def test_get_existing_user(self, api_client, superuser_token_headers: dict) -> None:
         user_id = 1
-        r = client.get(
+        r = api_client.get(
             f"{settings.API_V1_STR}/users/{user_id}",
             headers=superuser_token_headers,
         )
@@ -38,19 +37,19 @@ class TestUsersApi:
         assert "email" in api_user
 
     def test_get_non_existing_user(
-        self, client: TestClient, superuser_token_headers: dict
+        self, api_client, superuser_token_headers: dict
     ) -> None:
         user_id = -99
-        r = client.get(
+        r = api_client.get(
             f"{settings.API_V1_STR}/users/{user_id}",
             headers=superuser_token_headers,
         )
         assert r.status_code == status.HTTP_404_NOT_FOUND
 
-    def test_retrieve_users(
-        self, client: TestClient, superuser_token_headers: dict
-    ) -> None:
-        r = client.get(f"{settings.API_V1_STR}/users/", headers=superuser_token_headers)
+    def test_retrieve_users(self, api_client, superuser_token_headers: dict) -> None:
+        r = api_client.get(
+            f"{settings.API_V1_STR}/users/", headers=superuser_token_headers
+        )
         all_users = r.json()
 
         assert len(all_users) > 1

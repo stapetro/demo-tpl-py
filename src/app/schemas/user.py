@@ -1,6 +1,9 @@
+"""User-related DTOs"""
 from typing import Optional
 
 from pydantic import BaseModel, EmailStr
+
+# pylint: disable=missing-class-docstring,too-few-public-methods)
 
 
 # Shared properties

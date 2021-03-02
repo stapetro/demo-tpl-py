@@ -1,6 +1,9 @@
+"""Token DTOs"""
 from typing import Optional
 
 from pydantic import BaseModel
+
+# pylint: disable=missing-class-docstring
 
 
 class Token(BaseModel):
