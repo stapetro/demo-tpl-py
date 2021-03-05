@@ -4,4 +4,5 @@ Demo template for Python backend
 $ poetry shell
 $ poetry env info --path
 $ poetry install
+$ docker logs --follow demo-tpl-py-svc
 ```
