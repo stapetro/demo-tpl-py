@@ -19,6 +19,9 @@ docker-build:
 docker-run:
 	scripts/docker-run.sh
 
+docker-check:
+	scripts/docker-check.sh
+
 build-all: init check coverage
 
 run:
