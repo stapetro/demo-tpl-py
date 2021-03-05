@@ -1,3 +1,3 @@
 #!/bin/sh -ex
 
-bash scripts/test.sh -m "unit" "${@}"
+sh scripts/test.sh -m "unit" "${@}"
