@@ -1,5 +1,5 @@
 init:
-	CI/init.sh
+	scripts/init.sh
 
 format:
 	scripts/format.sh
@@ -13,8 +13,13 @@ test: check
 coverage: check
 	scripts/test-cov-html.sh
 
-deploy: test
-	CI/deploy.sh
+docker-build:
+	scripts/docker-build.sh
+
+docker-run:
+	scripts/docker-run.sh
+
+build-all: init check coverage
 
 run:
 	poetry run python src/run_dev_server.py
