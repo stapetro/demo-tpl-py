@@ -1,6 +1,3 @@
-#!/usr/bin/env bash
-
-set -e
-set -x
+#!/bin/sh -ex
 
 bash scripts/test.sh -m "api" "${@}"
