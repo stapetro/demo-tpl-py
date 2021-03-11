@@ -24,12 +24,16 @@ coverage: check
 docker-build:
 	scripts/docker-build.sh
 
+# Build base docker image for dev purposes.
+docker-build-base:
+	scripts/docker-build-base.sh
+
 # Build the backend inside a docker container.
 docker-run:
 	scripts/docker-run.sh
 
 # Check the codebase inside a docker container.
-docker-check:
+docker-check: docker-build-base
 	scripts/docker-check.sh
 
 # Run all build steps.

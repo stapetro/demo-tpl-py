@@ -418,6 +418,14 @@ dotenv = ["python-dotenv (>=0.10.4)"]
 email = ["email-validator (>=1.0.3)"]
 
 [[package]]
+name = "pydevd-pycharm"
+version = "203.7148.72"
+description = "PyCharm Debugger (used in PyCharm and PyDev)"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "pylint"
 version = "2.7.2"
 description = "python code static checker"
@@ -629,7 +637,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "92d4cda6896b69302e12735a3e92c9ddbb1fc0f0e1ffe9f0c7719a47c5fa5e8f"
+content-hash = "1f981d19ead1e6b384f2b52e554e5920288d428d5ae70307e5f6a25c6cd233e4"
 
 [metadata.files]
 appdirs = [
@@ -947,6 +955,9 @@ pydantic = [
     {file = "pydantic-1.8.1-cp39-cp39-win_amd64.whl", hash = "sha256:e8bc082afef97c5fd3903d05c6f7bb3a6af9fc18631b4cc9fedeb4720efb0c58"},
     {file = "pydantic-1.8.1-py3-none-any.whl", hash = "sha256:e3f8790c47ac42549dc8b045a67b0ca371c7f66e73040d0197ce6172b385e520"},
     {file = "pydantic-1.8.1.tar.gz", hash = "sha256:26cf3cb2e68ec6c0cfcb6293e69fb3450c5fd1ace87f46b64f678b0d29eac4c3"},
+]
+pydevd-pycharm = [
+    {file = "pydevd-pycharm-203.7148.72.tar.gz", hash = "sha256:4f0cc4deefdef8bbdafcb7f24089519ac954cab0162e7b765e4867d3f6d5d2bd"},
 ]
 pylint = [
     {file = "pylint-2.7.2-py3-none-any.whl", hash = "sha256:d09b0b07ba06bcdff463958f53f23df25e740ecd81895f7d2699ec04bbd8dc3b"},

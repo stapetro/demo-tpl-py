@@ -33,6 +33,9 @@ class Settings(BaseSettings):
     SMTP_PASSWORD: Optional[str] = None
     EMAILS_FROM_EMAIL: Optional[EmailStr] = None
     EMAILS_FROM_NAME: Optional[str] = None
+    PYDEVD: bool = False
+    PYDEVD_PORT: Optional[int] = None
+    PYDEVD_HOST: Optional[str] = None
 
     @validator("PROJECT_NAME")
     def get_project_name(cls, v: Optional[str], values: Dict[str, Any]) -> str:
