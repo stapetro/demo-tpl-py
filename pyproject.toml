@@ -74,6 +74,7 @@ mypy = "^0.812"
 pylint = "^2.7.2"
 pytest = "^6.2.2"
 pytest-cov = "^2.11.1"
+pydevd-pycharm = "~=203.7148.57"
 
 [tool.poetry.scripts]
 start-dev = "demo-tpl-py.run_dev_server:main"
