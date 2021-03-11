@@ -10,6 +10,6 @@ RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-
 
 COPY ./pyproject.toml ./poetry.lock* mypy.ini Makefile ./
 COPY ./scripts ./scripts
-RUN sh -c "make init"
+RUN make init
 
 CMD [ "python" ]

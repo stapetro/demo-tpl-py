@@ -4,7 +4,7 @@ modified_py_files=$1
 
 . ./scripts/env_config.sh
 
-sh ./scripts/format_common.sh ${modified_py_files} || exit $?
+./scripts/format_common.sh ${modified_py_files} || exit $?
 auto_modified_files=$(git diff --name-only | grep ".*\.py$")
 if [ -z "$auto_modified_files" ]
 then
@@ -47,4 +47,4 @@ else
   fi
 fi
 
-sh ./scripts/test-cov.sh || exit $?
+./scripts/test-cov.sh || exit $?
