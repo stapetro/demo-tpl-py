@@ -1,3 +1,3 @@
 #!/bin/sh -ex
 
-sh scripts/test-cov.sh --cov-report=html "${@}"
+scripts/test-cov.sh --cov-report=html "${@}"
