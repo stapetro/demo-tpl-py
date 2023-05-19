@@ -1,4 +1,11 @@
-#!/bin/sh -ex
+#!/usr/bin/env bash
 
-(docker build -f ./backend_build_check.dockerfile -t demo-tpl-py-check . && \
-docker run -i --rm --name demo-tpl-py-check-runtime demo-tpl-py-check) || exit $?
+. $(dirname $0)/set-labels.sh
+
+docker build -f ./backend_build_check.dockerfile \
+	--label "git.branch=$branch" \
+	--label "git.author=$author" \
+	--label "git.commit.sha=$sha" \
+	--label "git.commit.msg=$msg" \
+	--build-arg BASE_TAG=local \
+	-t dummy/demo-tpl-py-check:local .

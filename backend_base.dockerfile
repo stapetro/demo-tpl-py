@@ -1,15 +1,31 @@
-FROM python:3.8
+# Image name: demo-tpl-py-base
+# Build context: ./
+FROM python:3.11.3
 
-WORKDIR /usr/src/app
+ENV DIR_HOME=/non-root
+ENV DIR_APP=${DIR_HOME}/app
+ENV PATH="$DIR_HOME/.local/bin:$PATH"
+
+RUN useradd -s /bin/bash -u 1001 -g root -m -d $DIR_HOME non-root
+
+USER 1001:0
+
+SHELL ["/bin/bash", "-c"]
 
 # Install Poetry
-RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | POETRY_HOME=/opt/poetry python && \
-    cd /usr/local/bin && \
-    ln -s /opt/poetry/bin/poetry && \
-    poetry config virtualenvs.create false
+RUN python -m pip install --upgrade pip==23.1.2 \
+    && python -m pip install --user pipx \
+    && python -m pipx ensurepath \
+    && pipx install poetry==1.4.2 \
+    && poetry config cache-dir $DIR_HOME/.cache/pypoetry \
+    && poetry config virtualenvs.create false
+    
+WORKDIR $DIR_APP
 
-COPY ./pyproject.toml ./poetry.lock* mypy.ini Makefile ./
-COPY ./scripts ./scripts
-RUN make init
+COPY --chown=1001:0 . .
 
+RUN poetry install --no-root --only=main
+
+# Enable it to be used as a remote interpreter in IDE
+# https://www.jetbrains.com/help/idea/configuring-remote-python-sdks.html#4e306fb5
 CMD [ "python" ]

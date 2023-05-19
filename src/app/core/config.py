@@ -1,10 +1,13 @@
+"""Defines configuration settings"""
 import secrets
+from functools import lru_cache
 from typing import Any, Dict, List, Optional, Union
 
-from pydantic import AnyHttpUrl, BaseSettings, EmailStr, HttpUrl, PostgresDsn, validator
+from pydantic import AnyHttpUrl, BaseSettings, EmailStr, Field, PostgresDsn, validator
 
 
 class Settings(BaseSettings):
+    # pylint: disable=missing-class-docstring
     API_V1_STR: str = "/api/v1"
     SECRET_KEY: str = secrets.token_urlsafe(32)
     # 60 minutes * 24 hours * 8 days = 8 days
@@ -13,14 +16,16 @@ class Settings(BaseSettings):
     # e.g: '["http://localhost", "http://localhost:4200", "http://localhost:3000", \
     # "http://localhost:8080", "http://local.dockertoolbox.tiangolo.com"]'
     BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
+    VERSION: str = Field(default="0.1.0")
 
     @validator("BACKEND_CORS_ORIGINS", pre=True)
-    def assemble_cors_origins(cls, v: Union[str, List[str]]) -> Union[List[str], str]:
-        if isinstance(v, str) and not v.startswith("["):
-            return [i.strip() for i in v.split(",")]
-        elif isinstance(v, (list, str)):
-            return v
-        raise ValueError(v)
+    def assemble_cors_origins(
+        cls, value: Union[str, List[str]]
+    ) -> Union[List[str], str]:
+        # pylint: disable=missing-function-docstring,no-self-argument,no-self-use
+        if isinstance(value, str) and not value.startswith("["):
+            return [i.strip() for i in value.split(",")]
+        return value
 
     PROJECT_NAME: str = "dummy project"
 
@@ -38,17 +43,21 @@ class Settings(BaseSettings):
     PYDEVD_HOST: Optional[str] = None
 
     @validator("PROJECT_NAME")
-    def get_project_name(cls, v: Optional[str], values: Dict[str, Any]) -> str:
-        if not v:
+    def get_project_name(cls, value: Optional[str], values: Dict[str, Any]) -> str:
+        # pylint: disable=missing-function-docstring,no-self-argument,no-self-use
+        if not value:
             return values["PROJECT_NAME"]
-        return v
+        return value
 
     EMAIL_RESET_TOKEN_EXPIRE_HOURS: int = 48
     EMAIL_TEMPLATES_DIR: str = "/app/app/email-templates/build"
     EMAILS_ENABLED: bool = False
 
     @validator("EMAILS_ENABLED", pre=True)
-    def get_emails_enabled(cls, v: bool, values: Dict[str, Any]) -> bool:
+    def get_emails_enabled(
+        cls, value: bool, values: Dict[str, Any]  # pylint: disable=unused-argument
+    ) -> bool:
+        # pylint: disable=missing-function-docstring,no-self-argument,no-self-use
         return bool(
             values.get("SMTP_HOST")
             and values.get("SMTP_PORT")
@@ -59,9 +68,13 @@ class Settings(BaseSettings):
     USERS_OPEN_REGISTRATION: bool = False
 
     class Config:
+        # pylint: disable=too-few-public-methods
         case_sensitive = True
         env_file = ".env"
         env_file_encoding = "utf-8"
 
 
-settings = Settings()
+@lru_cache()
+def get_settings() -> Settings:
+    # pylint: disable=missing-function-docstring
+    return Settings()
