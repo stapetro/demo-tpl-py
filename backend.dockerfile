@@ -1,19 +1,22 @@
-FROM tiangolo/uvicorn-gunicorn-fastapi:python3.8
+# Image name: demo-tpl-py
+# Build context: ./
 
-WORKDIR /app/
+ARG BASE_TAG=local
 
-# Install Poetry
-RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | POETRY_HOME=/opt/poetry python && \
-    cd /usr/local/bin && \
-    ln -s /opt/poetry/bin/poetry && \
-    poetry config virtualenvs.create false
+FROM demo-tpl-py-base:$BASE_TAG
 
-# Copy poetry.lock* in case it doesn't exist in the repo
-COPY ./pyproject.toml ./poetry.lock* /app/
+ARG VERSION=x.y.z
+ENV VERSION=$VERSION
 
-# Allow installing dev dependencies
-ARG INSTALL_DEV=false
-RUN bash -c "if [ $INSTALL_DEV == 'true' ] ; then poetry install --no-root ; else poetry install --no-root --no-dev ; fi"
+COPY --chown=1001:0 src/app ./app
+COPY --chown=1001:0 src/run_server.py .
+COPY --chown=1001:0 scripts ./scripts
 
-COPY ./src/app /app/app
-ENV PYTHONPATH=/app
+ENV PYTHONPATH="$DIR_APP:$PYTHONPATH"
+
+ENV PORT=8080
+EXPOSE $PORT
+
+# Run the start script, it will check for an $DIR_APP/prestart.sh script
+# (e.g. for migrations). Then starts uvicorn.
+CMD ["/bin/bash", "./scripts/start.sh"]

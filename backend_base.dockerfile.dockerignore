@@ -1,0 +1,6 @@
+# Exclude all files and directories:
+*
+
+# Include only:
+!pyproject.toml
+!poetry.lock

@@ -1,4 +1,10 @@
-#!/bin/sh -x
+#!/usr/bin/env bash
 
-docker container stop demo-tpl-py-svc || true; docker container rm demo-tpl-py-svc || true
-docker run -d --rm --name demo-tpl-py-svc -p 8889:80 demo-tpl-py || exit $?
+docker container stop demo-tpl-py-svc 2>/dev/null
+docker container rm demo-tpl-py-svc 2>/dev/null
+docker run -d --rm \
+    -e PORT=8080 \
+    -p 8887:8080 \
+    --env-file src/.env \
+    --name demo-tpl-py-svc \
+    demo-tpl-py:local

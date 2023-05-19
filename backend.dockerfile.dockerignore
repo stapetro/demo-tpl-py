@@ -1,0 +1,7 @@
+# Exclude all files and directories:
+*
+
+# Include only:
+!/src/app
+!src/run_server.py
+!/scripts/start.sh
