@@ -1,9 +1,9 @@
 """
 Users REST API
 """
-from typing import Any, List
+from typing import List
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, Body, HTTPException, Path, Query, status
 
 from app import schemas
 
@@ -27,24 +27,36 @@ users = [
 ]
 
 
-@router.get("/", response_model=List[schemas.User])
+@router.get(
+    "/",
+    status_code=status.HTTP_200_OK,
+    response_description="List of users on success",
+)
 def read_users(
-    skip: int = 0,
-    limit: int = 100,
-) -> Any:
+    skip: int = Query(  # pylint: disable=unused-argument
+        default=0,
+        ge=0,
+        description="Number of records to skip",
+    ),
+    limit: int = Query(  # pylint: disable=unused-argument
+        default=100,
+        gt=0,
+        description="Maximal number of records to return",
+    ),
+) -> List[schemas.User]:
     """
     Retrieve users.
     """
     return users
 
 
-@router.post("/", response_model=schemas.User)
+@router.post("/")
 def create_user(
     *,
     user_in: schemas.UserCreate,
-) -> Any:
+) -> schemas.User:
     """
-    Create new user.
+    Create a new user.
     """
     next_user_id = users[-1].id + 1  # type: ignore
     user = schemas.User(
@@ -58,10 +70,18 @@ def create_user(
     return user
 
 
-@router.get("/{user_id}", response_model=schemas.User)
+@router.get(
+    "/{user_id}",
+    responses={
+        status.HTTP_404_NOT_FOUND: {
+            "description": "User not found",
+            "content": {"application/json": {"example": {"detail": "User not found"}}},
+        }
+    },
+)
 def read_user_by_id(
-    user_id: int,
-) -> Any:
+    user_id: int = Path(description="User id", example=1),
+) -> schemas.User:
     """
     Get a specific user by id.
     """
@@ -74,16 +94,24 @@ def read_user_by_id(
     return user
 
 
-@router.put("/{user_id}", response_model=schemas.User)
+@router.put(
+    "/{user_id}",
+    responses={
+        status.HTTP_404_NOT_FOUND: {
+            "description": "User not found",
+            "content": {"application/json": {"example": {"detail": "User not found"}}},
+        }
+    },
+)
 def update_user(
     *,
-    user_id: int,
-    user_in: schemas.UserUpdate,
-) -> Any:
+    user_id: int = Path(description="User id", example=1),
+    user_in: schemas.UserUpdate = Body(description="User data to update"),
+) -> schemas.User:
     """
     Update a user.
     """
     raise HTTPException(
-        status_code=404,
+        status_code=status.HTTP_404_NOT_FOUND,
         detail="The user with this username does not exist in the system",
     )

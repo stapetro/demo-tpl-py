@@ -1,5 +1,5 @@
-#!/bin/sh -ex
+#!/usr/bin/env bash
 
-. ./scripts/env_config.sh
+. $(dirname $0)/env_config.sh
 
-poetry run pytest -v ./tests "${@}" || exit $?
+$POETRY_OR_NOT pytest -v ./tests "${@}"

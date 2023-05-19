@@ -1,4 +1,12 @@
-#!/bin/sh -ex
+#!/usr/bin/env bash
 
-scripts/test-unit.sh --cov-config=./pyproject.toml \
-  --cov=./src --cov-branch --cov-fail-under=80 "${@}"
+REQUIRED_COVERAGE=85
+
+scripts/test.sh \
+  -m "unit" \
+  --cov-config=./pyproject.toml \
+  --cov=./src \
+  --cov-branch \
+  --cov-fail-under=${REQUIRED_COVERAGE} \
+  --cov-report term-missing:skip-covered \
+  "${@}"

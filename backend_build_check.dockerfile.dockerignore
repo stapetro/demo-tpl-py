@@ -1,0 +1,7 @@
+# Exclude all:
+*
+
+# Include only:
+!/src/
+!/tests/
+!/scripts/

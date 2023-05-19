@@ -1,3 +1,4 @@
-#!/bin/sh -ex
+#!/usr/bin/env bash
 
-poetry install --no-root --remove-untracked || exit $?
+# Intended to be used with a venv altogether.
+poetry install --no-root --sync

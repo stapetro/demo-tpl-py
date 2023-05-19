@@ -1,8 +1,10 @@
-FROM demo-tpl-py-base:latest
+# Image name: dummy/demo-tpl-py-check
+# Build context: ./
+FROM demo-tpl-py-dev:local
 
-WORKDIR /usr/src/app
+COPY --chown=1001:0 . .
 
-COPY ./src ./src
-COPY ./tests ./tests
+ENV POETRY_ENABLED=1
 
-CMD [ "make", "test" ]
+RUN scripts/check.sh
+RUN scripts/test-cov.sh --cov-report=xml --junitxml=junit/test-results.xml

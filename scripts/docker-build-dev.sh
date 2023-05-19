@@ -9,11 +9,10 @@ then
   exit 1
 fi
 
-docker build -f ./backend.dockerfile \
+docker build -f ./backend_dev.dockerfile \
 	--label "git.branch=$branch" \
 	--label "git.author=$author" \
 	--label "git.commit.sha=$sha" \
 	--label "git.commit.msg=$msg" \
-	--build-arg VERSION=$( <VERSION ) \
 	--build-arg BASE_TAG="$BASE_TAG" \
-	-t demo-tpl-py:local .
+	-t demo-tpl-py-dev:local .
