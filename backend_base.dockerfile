@@ -19,7 +19,7 @@ RUN python -m pip install --upgrade pip==23.1.2 \
     && pipx install poetry==1.4.2 \
     && poetry config cache-dir $DIR_HOME/.cache/pypoetry \
     && poetry config virtualenvs.create false
-    
+
 WORKDIR $DIR_APP
 
 COPY --chown=1001:0 . .

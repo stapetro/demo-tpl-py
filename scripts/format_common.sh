@@ -9,8 +9,8 @@ else
 fi
 
 $POETRY_OR_NOT autoflake $CHECK_ONLY \
-  --remove-all-unused-imports \
-  --recursive --remove-unused-variables \
+  --remove-all-unused-imports --expand-star-imports --remove-duplicate-keys \
+  --recursive --remove-unused-variables --ignore-init-module-imports \
   --in-place \
   --exclude=__init__.py \
   "${@}"
