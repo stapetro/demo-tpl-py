@@ -73,9 +73,9 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.11.3"
-fastapi = "^0.95"
+fastapi = "^0"
 uvicorn = "~0.22"
-pydantic = {extras = ["email","dotenv"], version = "^1.10.2"}
+pydantic = {version = "^1.10.2", extras = ["email", "dotenv"]}
 python-jose = {extras = ["cryptography"], version = "^3.3"}
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 httpx = "^0"
