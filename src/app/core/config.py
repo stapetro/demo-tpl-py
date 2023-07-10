@@ -1,9 +1,11 @@
 """Defines configuration settings"""
 import secrets
 from functools import lru_cache
-from typing import Any, Dict, List, Optional, Union
+from typing import List, Optional, Union
 
-from pydantic import AnyHttpUrl, BaseSettings, EmailStr, Field, PostgresDsn, validator
+from pydantic import AnyHttpUrl, EmailStr, Field, PostgresDsn, field_validator
+from pydantic_core.core_schema import ValidationInfo
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -18,16 +20,17 @@ class Settings(BaseSettings):
     BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
     VERSION: str = Field(default="0.1.0")
 
-    @validator("BACKEND_CORS_ORIGINS", pre=True)
+    @field_validator("BACKEND_CORS_ORIGINS", mode="before")
     def assemble_cors_origins(
         cls, value: Union[str, List[str]]
     ) -> Union[List[str], str]:
         # pylint: disable=missing-function-docstring,no-self-argument,no-self-use
-        if isinstance(value, str) and not value.startswith("["):
-            return [i.strip() for i in value.split(",")]
+        if isinstance(value, str):
+            return [value]
         return value
 
     PROJECT_NAME: str = "dummy project"
+    ENV_NAME: str = "dummy env"
 
     SQLALCHEMY_DATABASE_URI: Optional[PostgresDsn] = None
 
@@ -42,22 +45,18 @@ class Settings(BaseSettings):
     PYDEVD_PORT: Optional[int] = None
     PYDEVD_HOST: Optional[str] = None
 
-    @validator("PROJECT_NAME")
-    def get_project_name(cls, value: Optional[str], values: Dict[str, Any]) -> str:
-        # pylint: disable=missing-function-docstring,no-self-argument,no-self-use
-        if not value:
-            return values["PROJECT_NAME"]
-        return value
-
     EMAIL_RESET_TOKEN_EXPIRE_HOURS: int = 48
     EMAIL_TEMPLATES_DIR: str = "/app/app/email-templates/build"
     EMAILS_ENABLED: bool = False
 
-    @validator("EMAILS_ENABLED", pre=True)
+    @field_validator("EMAILS_ENABLED", mode="before")
     def get_emails_enabled(
-        cls, value: bool, values: Dict[str, Any]  # pylint: disable=unused-argument
+        cls,
+        value: bool,  # pylint: disable=unused-argument
+        info: ValidationInfo,
     ) -> bool:
         # pylint: disable=missing-function-docstring,no-self-argument,no-self-use
+        values = getattr(info, "data")
         return bool(
             values.get("SMTP_HOST")
             and values.get("SMTP_PORT")
@@ -66,12 +65,9 @@ class Settings(BaseSettings):
 
     EMAIL_TEST_USER: EmailStr = "test@example.com"  # type: ignore
     USERS_OPEN_REGISTRATION: bool = False
-
-    class Config:
-        # pylint: disable=too-few-public-methods
-        case_sensitive = True
-        env_file = ".env"
-        env_file_encoding = "utf-8"
+    model_config = SettingsConfigDict(
+        case_sensitive=True, env_file=".env", env_file_encoding="utf-8"
+    )
 
 
 @lru_cache()

@@ -58,9 +58,9 @@ class TestSettings:
         settings = Settings()
         cors: List[AnyHttpUrl] = settings.BACKEND_CORS_ORIGINS
 
-        assert str(cors[0]) == url_1
-        assert str(cors[1]) == url_2
-        assert str(cors[2]) == url_3
+        assert cors[0] == AnyHttpUrl(url_1)
+        assert cors[1] == AnyHttpUrl(url_2)
+        assert cors[2] == AnyHttpUrl(url_3)
 
     def test_backend_cors__single_value(self, monkeypatch):
         url_1 = "http://localhost"
@@ -69,7 +69,15 @@ class TestSettings:
         settings = Settings()
         cors: List[AnyHttpUrl] = settings.BACKEND_CORS_ORIGINS
 
-        assert str(cors[0]) == url_1
+        assert cors[0] == AnyHttpUrl(url_1)
+
+    def test_project_name__single_value(self, monkeypatch):
+        expected_project_name = "cool project name"
+        monkeypatch.setenv("PROJECT_NAME", expected_project_name)
+
+        settings = Settings()
+
+        assert settings.PROJECT_NAME == expected_project_name
 
     @pytest.mark.parametrize("config_key", ["BACKEND_CORS_ORIGINS"])
     @pytest.mark.parametrize(
