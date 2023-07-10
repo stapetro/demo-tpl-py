@@ -75,10 +75,11 @@ license = "MIT"
 python = "^3.11.3"
 fastapi = "^0"
 uvicorn = "~0.22"
-pydantic = {version = "^1.10.2", extras = ["email", "dotenv"]}
+pydantic = {version = "^2.0.2", extras = ["email", "dotenv"]}
 python-jose = {extras = ["cryptography"], version = "^3.3"}
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 httpx = "^0"
+pydantic-settings = "^2.0.1"
 
 [tool.poetry.group.dev.dependencies]
 black = {version = "^23.1.0", extras = ["d"]}

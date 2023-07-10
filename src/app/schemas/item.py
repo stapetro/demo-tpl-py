@@ -2,6 +2,7 @@
 from typing import Optional
 
 from pydantic import BaseModel
+from pydantic_settings import SettingsConfigDict
 
 # pylint: disable=missing-class-docstring,too-few-public-methods
 
@@ -27,9 +28,7 @@ class ItemInDBBase(ItemBase):
     id: int
     title: str
     owner_id: int
-
-    class Config:
-        orm_mode = True
+    model_config = SettingsConfigDict(from_attributes=True)
 
 
 # Properties to return to client
