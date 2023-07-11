@@ -1,6 +1,6 @@
 # Image name: demo-tpl-py-base
 # Build context: ./
-FROM python:3.11.3
+FROM python:3.11.4
 
 ENV DIR_HOME=/non-root
 ENV DIR_APP=${DIR_HOME}/app
@@ -16,7 +16,7 @@ SHELL ["/bin/bash", "-c"]
 RUN python -m pip install --upgrade pip==23.1.2 \
     && python -m pip install --user pipx \
     && python -m pipx ensurepath \
-    && pipx install poetry==1.4.2 \
+    && pipx install poetry==1.5.1 \
     && poetry config cache-dir $DIR_HOME/.cache/pypoetry \
     && poetry config virtualenvs.create false
 
