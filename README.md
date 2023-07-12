@@ -8,9 +8,9 @@ This boilerplate is used for demo purposes as part of education sessions/trainin
    ```bash
    # Commands below illustrate what you need to do as an idea.
    # Exact commands might change depending on a particular OS.
-   $ pyenv install -l | grep 3.11.3
-   $ pyenv install 3.11.3
-   $ pyenv global 3.11.3
+   $ pyenv install -l | grep 3.11.4
+   $ pyenv install 3.11.4
+   $ pyenv global 3.11.4
    ```
 3. Install [Poetry](https://python-poetry.org/docs/) package manager.
 4. Install [make](https://www.gnu.org/software/make/) CLI tool.
