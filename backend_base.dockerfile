@@ -4,7 +4,7 @@ FROM python:3.11.4
 
 ENV DIR_HOME=/non-root
 ENV DIR_APP=${DIR_HOME}/app
-ENV PATH="$DIR_HOME/.local/bin:$PATH"
+ENV PATH="$DIR_HOME/.local/bin:$DIR_HOME/.local/pipx/venvs/poetry/bin:$PATH"
 
 RUN useradd -s /bin/bash -u 1001 -g root -m -d $DIR_HOME non-root
 
