@@ -2,7 +2,7 @@
 Unit test the config module.
 """
 # pylint: disable=missing-class-docstring,missing-function-docstring,no-self-use,
-from typing import List
+import typing as t
 
 import pytest
 from pydantic import AnyHttpUrl, ValidationError
@@ -56,7 +56,7 @@ class TestSettings:
         monkeypatch.setenv("BACKEND_CORS_ORIGINS", f'["{url_1}","{url_2}","{url_3}"]')
 
         settings = Settings()
-        cors: List[AnyHttpUrl] = settings.BACKEND_CORS_ORIGINS
+        cors: t.List[AnyHttpUrl] = settings.BACKEND_CORS_ORIGINS
 
         assert cors[0] == AnyHttpUrl(url_1)
         assert cors[1] == AnyHttpUrl(url_2)
@@ -67,7 +67,7 @@ class TestSettings:
         monkeypatch.setenv("BACKEND_CORS_ORIGINS", f'"{url_1}"')
 
         settings = Settings()
-        cors: List[AnyHttpUrl] = settings.BACKEND_CORS_ORIGINS
+        cors: t.List[AnyHttpUrl] = settings.BACKEND_CORS_ORIGINS
 
         assert cors[0] == AnyHttpUrl(url_1)
 
