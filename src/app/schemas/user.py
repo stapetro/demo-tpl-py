@@ -1,8 +1,7 @@
 """User-related DTOs"""
 from typing import Optional
 
-from pydantic import BaseModel, EmailStr
-from pydantic_settings import SettingsConfigDict
+from pydantic import BaseModel, ConfigDict, EmailStr
 
 # pylint: disable=missing-class-docstring,too-few-public-methods)
 
@@ -28,7 +27,7 @@ class UserUpdate(UserBase):
 
 class UserInDBBase(UserBase):
     id: Optional[int] = None
-    model_config = SettingsConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True)
 
 
 # Additional properties to return via API
