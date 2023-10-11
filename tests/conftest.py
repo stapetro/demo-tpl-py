@@ -18,6 +18,11 @@ def api_client() -> AsyncClient:
     return AsyncClient(app=app, base_url="http://test")
 
 
+@pytest.fixture(scope="session")
+def real_api_client() -> AsyncClient:
+    return AsyncClient(base_url="http://localhost:8082")
+
+
 @pytest.fixture(scope="module")
 def superuser_token_headers() -> Dict[str, str]:
     return get_superuser_token_headers()

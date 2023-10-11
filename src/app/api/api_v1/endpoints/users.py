@@ -6,8 +6,11 @@ from typing import List
 from fastapi import APIRouter, Body, HTTPException, Path, Query, status
 
 from app import schemas
+from app.core.config import LoggerFactory, SomeCtx
 
 router = APIRouter()
+
+logger = LoggerFactory.get_logger(__name__)
 
 users = [
     schemas.User(
@@ -47,6 +50,13 @@ def read_users(
     """
     Retrieve users.
     """
+    logger.info("Retrieving users")
+    context = SomeCtx(userId="1", geoId="geo-2")
+    logger_with_ctx = LoggerFactory.wrap_logger_with_ctx(logger, context)
+    logger_with_ctx.warning("Retrieving users with context")
+    logger.error("Retrieving users")
+    logger_with_ctx.debug("Retrieving users with context")
+    logger.critical("Retrieving users")
     return users
 
 
