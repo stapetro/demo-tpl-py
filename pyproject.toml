@@ -80,6 +80,7 @@ python-jose = {extras = ["cryptography"], version = "^3.3"}
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 httpx = "^0"
 pydantic-settings = "^2.0.1"
+ecs-logging = "^2.1.0"
 
 [tool.poetry.group.dev.dependencies]
 black = {version = "^23.1.0", extras = ["d"]}

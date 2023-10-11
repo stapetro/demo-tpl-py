@@ -1,0 +1,9 @@
+# demo api bookmarks
+
+###
+# @name Read users
+GET {{api-url}}/users/
+
+###
+# @name Read user by id
+GET {{api-url}}/users/{{user_id_1}}

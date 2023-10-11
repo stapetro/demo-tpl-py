@@ -5,7 +5,7 @@ from argparse import ArgumentParser
 
 import uvicorn
 
-from app.core.config import get_settings
+from app.core.config import LoggingConfig, get_settings
 
 if __name__ == "__main__":
     if get_settings().PYDEVD:
@@ -36,14 +36,22 @@ if __name__ == "__main__":
     )
     config = parser.parse_args()
 
-    reload_dirs = config.reload.split(",") if config.reload else []
-    reload_enabled = bool(reload_dirs)
+    uvicorn_config: dict = {
+        "log_config": LoggingConfig.get_config(get_settings().ENV_NAME),
+    }
+    if get_settings().ENV_NAME == "loc":
+        reload_dirs = config.reload.split(",") if config.reload else []
+        reload_enabled = bool(reload_dirs)
+        uvicorn_config = {
+            **uvicorn_config,
+            "reload": reload_enabled,
+            "reload_dirs": reload_dirs,
+            "use_colors": True,
+        }
 
     uvicorn.run(
         "app.main:app",
         host="0.0.0.0",
         port=config.port,
-        reload=reload_enabled,
-        reload_dirs=reload_dirs,
-        use_colors=True,
+        **uvicorn_config,
     )
