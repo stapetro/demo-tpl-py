@@ -78,7 +78,10 @@ def create_item(
 )
 def update_item(
     *,
-    item_id: int = Path(description="Item id", example=1),
+    item_id: int = Path(
+        description="Item id",
+        openapi_examples={"1": {"value": 1}},
+    ),
     item_in: schemas.ItemUpdate = Body(description="Item data to update"),
 ) -> schemas.Item:
     """
@@ -106,7 +109,10 @@ def update_item(
 )
 def read_item(
     *,
-    item_id: int = Path(description="Item id", example=1),
+    item_id: int = Path(
+        description="Item id",
+        openapi_examples={"1": {"value": 1}},
+    ),
 ) -> schemas.Item:
     """
     Get item by ID.
@@ -136,7 +142,10 @@ def _find_item_by_id(item_id: int) -> Optional[schemas.Item]:
 )
 def delete_item(
     *,
-    item_id: int = Path(description="Item id", example=1),
+    item_id: int = Path(
+        description="Item id",
+        openapi_examples={"1": {"value": 1}},
+    ),
 ) -> schemas.Item:
     """
     Delete an item.

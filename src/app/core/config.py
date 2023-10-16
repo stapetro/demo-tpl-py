@@ -145,6 +145,8 @@ class LoggingConfig:
 
 
 class SomeCtx(BaseModel):
+    """Some context"""
+
     userId: str
     geoId: str
 
