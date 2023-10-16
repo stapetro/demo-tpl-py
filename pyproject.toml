@@ -8,7 +8,7 @@ max-line-length = 88
 profile = "black"
 
 [tool.pylint.master]
-extension-pkg-whitelist = ["pydantic"]
+extension-pkg-allow-list = ["pydantic"]
 fail-under = "9"
 ignore = [
 ]
