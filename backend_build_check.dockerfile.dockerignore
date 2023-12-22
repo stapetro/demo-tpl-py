@@ -3,5 +3,8 @@
 
 # Include only:
 !/src/
-!/tests/
+!/tests/unit/
+!/tests/utils/
+!/tests/conftest.py
+!/tests/__init__.py
 !/scripts/

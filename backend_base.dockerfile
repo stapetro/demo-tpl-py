@@ -13,10 +13,10 @@ USER 1001:0
 SHELL ["/bin/bash", "-c"]
 
 # Install Poetry
-RUN python -m pip install --upgrade pip==23.2.1 \
+RUN python -m pip install --upgrade pip==23.3.1 \
     && python -m pip install --user pipx \
     && python -m pipx ensurepath \
-    && pipx install poetry==1.6.1 \
+    && pipx install poetry==1.7.1 \
     && poetry config cache-dir $DIR_HOME/.cache/pypoetry \
     && poetry config virtualenvs.create false
 
