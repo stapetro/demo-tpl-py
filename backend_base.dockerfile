@@ -1,6 +1,6 @@
 # Image name: demo-tpl-py-base
 # Build context: ./
-FROM python:3.11.5-bullseye
+FROM python:3.11.8-bullseye
 
 ENV DIR_HOME=/non-root
 ENV DIR_APP=${DIR_HOME}/app
@@ -13,7 +13,7 @@ USER 1001:0
 SHELL ["/bin/bash", "-c"]
 
 # Install Poetry
-RUN python -m pip install --upgrade pip==23.3.1 \
+RUN python -m pip install --upgrade pip==24.0 \
     && python -m pip install --user pipx \
     && python -m pipx ensurepath \
     && pipx install poetry==1.7.1 \

@@ -1,6 +1,7 @@
 """
 Boot FastApi app
 """
+
 import logging
 from urllib.parse import urljoin
 

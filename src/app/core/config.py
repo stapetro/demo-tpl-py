@@ -1,4 +1,5 @@
 """Defines configuration settings"""
+
 import logging
 import secrets
 import typing as t
