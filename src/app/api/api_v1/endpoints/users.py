@@ -1,6 +1,7 @@
 """
 Users REST API
 """
+
 from typing import List
 
 from fastapi import APIRouter, Body, HTTPException, Path, Query, status

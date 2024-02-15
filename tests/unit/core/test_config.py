@@ -1,6 +1,7 @@
 """
 Unit test the config module.
 """
+
 import json
 import logging
 
