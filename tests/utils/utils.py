@@ -1,4 +1,5 @@
 """Common utilities for all types of tests"""
+
 # pylint: disable=missing-function-docstring
 import random
 import string

@@ -1,6 +1,7 @@
 """
 Dev config for uvicorn
 """
+
 from argparse import ArgumentParser
 
 import uvicorn
