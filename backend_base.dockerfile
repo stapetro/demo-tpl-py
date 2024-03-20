@@ -16,15 +16,14 @@ SHELL ["/bin/bash", "-c"]
 RUN python -m pip install --upgrade pip==24.0 \
     && python -m pip install --user pipx \
     && python -m pipx ensurepath \
-    && pipx install poetry==1.7.1 \
-    && poetry config cache-dir $DIR_HOME/.cache/pypoetry \
-    && poetry config virtualenvs.create false
+    && pipx install poetry==1.8.2 \
+    && poetry config cache-dir $DIR_HOME/.cache/pypoetry
 
 WORKDIR $DIR_APP
 
 COPY --chown=1001:0 . .
 
-RUN poetry install --no-root --only=main
+RUN poetry install --no-ansi --no-root --only=main
 
 # Enable it to be used as a remote interpreter in IDE
 # https://www.jetbrains.com/help/idea/configuring-remote-python-sdks.html#4e306fb5
