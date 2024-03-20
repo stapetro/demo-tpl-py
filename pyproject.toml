@@ -65,6 +65,7 @@ show_error_codes = "true"
 
 
 [tool.poetry]
+package-mode = false
 name = "demo-tpl-py"
 version = "0.1.0"
 description = "Demo template for python backend"
