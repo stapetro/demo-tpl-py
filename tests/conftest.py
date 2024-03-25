@@ -2,7 +2,8 @@
 from typing import Dict
 
 import pytest
-from httpx import AsyncClient
+from fastapi import FastAPI
+from httpx import ASGITransport, AsyncClient
 from utils.utils import get_superuser_token_headers
 
 from app.main import app
@@ -15,7 +16,7 @@ def anyio_backend():
 
 @pytest.fixture(scope="module")
 def api_client() -> AsyncClient:
-    return AsyncClient(app=app, base_url="http://test")
+    return new_api_client_from(app)
 
 
 @pytest.fixture(scope="session")
@@ -26,3 +27,7 @@ def real_api_client() -> AsyncClient:
 @pytest.fixture(scope="module")
 def superuser_token_headers() -> Dict[str, str]:
     return get_superuser_token_headers()
+
+
+def new_api_client_from(app_: FastAPI) -> AsyncClient:
+    return AsyncClient(transport=ASGITransport(app=app_), base_url="http://test")
