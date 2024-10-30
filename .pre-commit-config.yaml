@@ -42,8 +42,8 @@ repos:
         language: system
         types: [python]
         args: [
-            "-rn", # Only display messages
-            "-sn", # Don't display the score
+          "--rcfile=./pyproject.toml",
+          "--reports=y",
         ]
   - repo: local
     hooks:
