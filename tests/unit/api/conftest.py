@@ -14,12 +14,12 @@ def anyio_backend():
     return "asyncio"
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture
 def api_client() -> AsyncClient:
     return new_api_client_from(app)
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture
 def real_api_client() -> AsyncClient:
     return AsyncClient(base_url="http://localhost:8082")
 

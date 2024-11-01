@@ -10,7 +10,7 @@ import typing as t
 
 import pytest
 import uvicorn
-from pydantic import AnyHttpUrl, ValidationError
+from pydantic import AnyHttpUrl, SecretStr, ValidationError
 
 from app.core.config import (
     AccessEcsLogFormatter,
@@ -56,6 +56,21 @@ class TestSettings:
                 "ENV_NAME",
                 "loc-unit-test",
                 str,
+            ),
+            (
+                "API_DOC_ENABLED",
+                "True",
+                bool,
+            ),
+            (
+                "API_DOC_USER",
+                "dummy user",
+                str,
+            ),
+            (
+                "API_DOC_PASSWORD",
+                "dummy pwd",
+                SecretStr,
             ),
         ],
     )
@@ -130,6 +145,26 @@ class TestSettings:
         assert settings_1 is not None
         assert settings_2 is not None
         assert settings_1 is settings_2
+
+    @pytest.mark.parametrize(
+        "api_doc_env_vars_to_delete",
+        [
+            ["API_DOC_USER", "API_DOC_PASSWORD"],
+            ["API_DOC_USER"],
+            ["API_DOC_PASSWORD"],
+        ],
+        ids=["Credentials", "User only", "Password only"],
+    )
+    def test_require_api_doc_credentials__doc_enabled_on_prd_env(
+        self, monkeypatch, api_doc_env_vars_to_delete: list[str]
+    ):
+        monkeypatch.setenv("ENV_NAME", "prd")
+        monkeypatch.setenv("API_DOC_ENABLED", "True")
+        for env_var in api_doc_env_vars_to_delete:
+            monkeypatch.delenv(env_var, raising=False)
+
+        with pytest.raises(ValidationError):
+            _ = Settings()
 
 
 @pytest.mark.unit

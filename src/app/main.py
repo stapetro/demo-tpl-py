@@ -3,12 +3,15 @@ Boot FastApi app
 """
 
 import logging
-from urllib.parse import urljoin
+import typing as t
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI, Request
+from fastapi.openapi.docs import get_redoc_html, get_swagger_ui_html
+from fastapi.responses import HTMLResponse
 from starlette.middleware.cors import CORSMiddleware
 
 from app.api.api_v1.api import api_router
+from app.api.api_v1.auth import api_doc_security
 from app.core.config import get_settings
 
 
@@ -31,9 +34,10 @@ def _setup_cors(p_app: FastAPI) -> None:
 def _create_app() -> FastAPI:
     app_ = FastAPI(
         title=get_settings().PROJECT_NAME,
-        openapi_url=urljoin(f"{get_settings().API_V1_STR}/", "openapi.json"),
+        openapi_url=None,
         version=get_settings().VERSION,
-        docs_url="/swagger",
+        docs_url=None,
+        redoc_url=None,
     )
     app_.include_router(api_router, prefix=get_settings().API_V1_STR)
     _setup_cors(app_)
@@ -41,6 +45,63 @@ def _create_app() -> FastAPI:
 
 
 app = _create_app()
+
+
+@app.get(
+    "/openapi.json",
+    include_in_schema=False,
+    dependencies=[Depends(api_doc_security)],
+)
+async def openapi() -> dict[str, t.Any]:
+    """
+    Route for OpenAPI schema
+    :return: Schema
+    """
+    return app.openapi()
+
+
+@app.get(
+    "/swagger",
+    response_class=HTMLResponse,
+    include_in_schema=False,
+    dependencies=[Depends(api_doc_security)],
+)
+async def get_swagger_ui(
+    request: Request,
+) -> HTMLResponse:
+    """
+    Route for Swagger UI
+    :param request: Route request
+    :return: Swagger HTML page
+    """
+    root_path = request.scope.get("root_path", "").rstrip("/")
+    openapi_url = root_path + "/openapi.json"
+    return get_swagger_ui_html(
+        openapi_url=openapi_url,
+        title=get_settings().PROJECT_NAME + " - Swagger UI",
+    )
+
+
+@app.get(
+    "/redoc",
+    response_class=HTMLResponse,
+    include_in_schema=False,
+    dependencies=[Depends(api_doc_security)],
+)
+async def get_redoc_ui(
+    request: Request,
+) -> HTMLResponse:
+    """
+    Route for ReDoc
+    :param request: Route request
+    :return: Redoc HTML page
+    """
+    root_path = request.scope.get("root_path", "").rstrip("/")
+    openapi_url = root_path + "/openapi.json"
+    return get_redoc_html(
+        openapi_url=openapi_url,
+        title=get_settings().PROJECT_NAME + " - ReDoc",
+    )
 
 
 app_logger = logging.getLogger("app")
