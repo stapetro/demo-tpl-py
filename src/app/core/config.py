@@ -13,7 +13,9 @@ from pydantic import (
     EmailStr,
     Field,
     PostgresDsn,
+    SecretStr,
     field_validator,
+    model_validator,
 )
 from pydantic_core.core_schema import ValidationInfo
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -76,9 +78,26 @@ class Settings(BaseSettings):
 
     EMAIL_TEST_USER: EmailStr = "test@example.com"  # type: ignore
     USERS_OPEN_REGISTRATION: bool = False
+
+    API_DOC_ENABLED: t.Optional[bool] = None
+    API_DOC_USER: t.Optional[str] = None
+    API_DOC_PASSWORD: t.Optional[SecretStr] = None
+
     model_config = SettingsConfigDict(
         case_sensitive=True, env_file=".env", env_file_encoding="utf-8"
     )
+
+    @model_validator(mode="after")
+    def check_api_doc_config(self) -> "Settings":
+        """
+        Checks API doc configuration based on env.
+        :return: Settings object
+        """
+        if (self.API_DOC_ENABLED is True and self.ENV_NAME == "prd") and (
+            self.API_DOC_USER is None or self.API_DOC_PASSWORD is None
+        ):
+            raise ValueError("API doc credentials are missing")
+        return self
 
 
 class AccessEcsLogFormatter(ecs_logging.StdlibFormatter):

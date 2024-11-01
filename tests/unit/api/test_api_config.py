@@ -1,3 +1,5 @@
+""""Test API configurations"""
+
 # pylint: disable=missing-class-docstring,missing-function-docstring,
 # pylint: disable=no-self-use
 
@@ -5,10 +7,10 @@ import typing as t
 from unittest import mock
 
 import pytest
-from conftest import new_api_client_from
 from fastapi import status
 from httpx import AsyncClient
 from pydantic import AnyHttpUrl
+from unit.api.conftest import new_api_client_from
 
 from app.core import config
 from app.main import _create_app
