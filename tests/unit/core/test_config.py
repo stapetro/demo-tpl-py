@@ -7,10 +7,12 @@ import logging
 
 # pylint: disable=missing-class-docstring,missing-function-docstring,no-self-use,
 import typing as t
+from collections import OrderedDict
 
 import pytest
 import uvicorn
-from pydantic import AnyHttpUrl, SecretStr, ValidationError
+from _pytest.fixtures import FixtureRequest
+from pydantic import AnyHttpUrl, BaseModel, SecretStr, ValidationError
 
 from app.core.config import (
     AccessEcsLogFormatter,
@@ -255,8 +257,15 @@ class TestLoggerFactory:
         actual_record = caplog.records[0]
         assert actual_record.labels == {}
 
-    def test_get_logger__with_context(self, caplog):
-        mdc = SomeCtx(**{"userId": "abc123", "geoId": "def456"})
+    @pytest.mark.parametrize(
+        "mdc",
+        [
+            SomeCtx(**{"userId": "abc123", "geoId": "def456"}),
+            {"userId": "321bca", "geoId": "789"},
+        ],
+        ids=["context object", "context dict"],
+    )
+    def test_get_logger__with_context(self, caplog, mdc):
         expected_msg = "Dummy message"
 
         logger = LoggerFactory.get_logger("dummy_context", mdc)
@@ -270,15 +279,29 @@ class TestLoggerFactory:
         self._compare_labels_with_ctx(actual_record.labels, mdc)
 
     @pytest.mark.parametrize(
-        "initial_logger",
+        "initial_logger_create_fn",
         [
-            logging.getLogger("dummy_context_1"),
-            LoggerFactory.get_logger("dummy_context_2"),
+            logging.getLogger,
+            LoggerFactory.get_logger,
         ],
         ids=["Initial logger object", "Initial logger adapter object"],
     )
-    def test_wrap_logger_with_ctx__ctx(self, caplog, initial_logger: logging.Logger):
-        mdc = SomeCtx(**{"userId": "def456", "geoId": "abc123"})
+    @pytest.mark.parametrize(
+        "mdc",
+        [
+            SomeCtx(**{"userId": "abc123", "geoId": "def456"}),
+            {"userId": "321bca", "geoId": "789"},
+        ],
+        ids=["context object", "context dict"],
+    )
+    def test_wrap_logger_with_ctx__ctx(
+        self,
+        caplog,
+        request: FixtureRequest,
+        initial_logger_create_fn,
+        mdc,
+    ):
+        initial_logger = initial_logger_create_fn(request.node.callspec.id)
         expected_msg_1 = "Dummy message 1"
         expected_msg_2 = "Dummy message 2"
 
@@ -301,6 +324,11 @@ class TestLoggerFactory:
         self._compare_labels_with_ctx(actual_record_2.labels, mdc)
 
     @classmethod
-    def _compare_labels_with_ctx(cls, record_labels: dict[str, t.Any], mdc: SomeCtx):
-        assert record_labels["userId"] == mdc.userId
-        assert record_labels["geoId"] == mdc.geoId
+    def _compare_labels_with_ctx(
+        cls, record_labels: dict[str, t.Any], mdc: BaseModel | dict[str, t.Any]
+    ):
+        if isinstance(mdc, BaseModel):
+            mdc = OrderedDict(mdc.model_dump())
+        else:
+            mdc = OrderedDict(mdc)
+        assert OrderedDict(record_labels) == mdc

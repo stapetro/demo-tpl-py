@@ -178,7 +178,7 @@ class LoggerFactory:
     def wrap_logger_with_ctx(
         cls,
         logger: logging.Logger | logging.LoggerAdapter,
-        mdc: SomeCtx | None = None,
+        mdc: BaseModel | dict[str, t.Any] | None = None,
     ) -> logging.Logger:
         """
         Wraps existing logger with context.
@@ -201,7 +201,7 @@ class LoggerFactory:
     def get_logger(
         cls,
         name: str,
-        mdc: SomeCtx | None = None,
+        mdc: BaseModel | dict[str, t.Any] | None = None,
     ) -> logging.Logger:
         """
         Creates and returns a logger with context.
@@ -212,13 +212,12 @@ class LoggerFactory:
         return cls.wrap_logger_with_ctx(logging.getLogger(name), mdc)
 
     @classmethod
-    def _convert_some_ctx_to_labels(cls, mdc: SomeCtx | None) -> dict[str, t.Any]:
+    def _convert_some_ctx_to_labels(
+        cls, mdc: BaseModel | dict[str, t.Any] | None
+    ) -> dict[str, t.Any]:
         if mdc is None:
             return {}
-        return {
-            "userId": mdc.userId,
-            "geoId": mdc.geoId,
-        }
+        return mdc.model_dump() if isinstance(mdc, BaseModel) else mdc
 
 
 @lru_cache()
