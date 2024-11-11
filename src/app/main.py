@@ -3,12 +3,14 @@ Boot FastApi app
 """
 
 import logging
+import sys
 import typing as t
 
 from fastapi import Depends, FastAPI, Request
 from fastapi.openapi.docs import get_redoc_html, get_swagger_ui_html
 from fastapi.responses import HTMLResponse
 from starlette.middleware.cors import CORSMiddleware
+from uvicorn.logging import DefaultFormatter
 
 from app.api.api_v1.api import api_router
 from app.api.api_v1.auth import api_doc_security
@@ -107,3 +109,12 @@ async def get_redoc_ui(
 app_logger = logging.getLogger("app")
 app_logger.parent = logging.getLogger("uvicorn")
 app_logger.setLevel(logging.DEBUG)
+
+
+if get_settings().ENV_NAME == "loc":  # pragma: no cover
+    app_handler = logging.StreamHandler(stream=sys.stderr)
+    app_handler.setFormatter(
+        DefaultFormatter(fmt="%(levelprefix)s %(message)s labels=%(labels)s")
+    )
+    app_logger.addHandler(app_handler)
+    app_logger.propagate = False
