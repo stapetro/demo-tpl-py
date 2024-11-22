@@ -13,7 +13,9 @@ from pydantic import (
     EmailStr,
     Field,
     PostgresDsn,
+    SecretStr,
     field_validator,
+    model_validator,
 )
 from pydantic_core.core_schema import ValidationInfo
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -76,9 +78,26 @@ class Settings(BaseSettings):
 
     EMAIL_TEST_USER: EmailStr = "test@example.com"  # type: ignore
     USERS_OPEN_REGISTRATION: bool = False
+
+    API_DOC_ENABLED: t.Optional[bool] = None
+    API_DOC_USER: t.Optional[str] = None
+    API_DOC_PASSWORD: t.Optional[SecretStr] = None
+
     model_config = SettingsConfigDict(
         case_sensitive=True, env_file=".env", env_file_encoding="utf-8"
     )
+
+    @model_validator(mode="after")
+    def check_api_doc_config(self) -> "Settings":
+        """
+        Checks API doc configuration based on env.
+        :return: Settings object
+        """
+        if (self.API_DOC_ENABLED is True and self.ENV_NAME == "prd") and (
+            self.API_DOC_USER is None or self.API_DOC_PASSWORD is None
+        ):
+            raise ValueError("API doc credentials are missing")
+        return self
 
 
 class AccessEcsLogFormatter(ecs_logging.StdlibFormatter):
@@ -159,7 +178,7 @@ class LoggerFactory:
     def wrap_logger_with_ctx(
         cls,
         logger: logging.Logger | logging.LoggerAdapter,
-        mdc: SomeCtx | None = None,
+        mdc: BaseModel | dict[str, t.Any] | None = None,
     ) -> logging.Logger:
         """
         Wraps existing logger with context.
@@ -182,7 +201,7 @@ class LoggerFactory:
     def get_logger(
         cls,
         name: str,
-        mdc: SomeCtx | None = None,
+        mdc: BaseModel | dict[str, t.Any] | None = None,
     ) -> logging.Logger:
         """
         Creates and returns a logger with context.
@@ -193,13 +212,12 @@ class LoggerFactory:
         return cls.wrap_logger_with_ctx(logging.getLogger(name), mdc)
 
     @classmethod
-    def _convert_some_ctx_to_labels(cls, mdc: SomeCtx | None) -> dict[str, t.Any]:
+    def _convert_some_ctx_to_labels(
+        cls, mdc: BaseModel | dict[str, t.Any] | None
+    ) -> dict[str, t.Any]:
         if mdc is None:
             return {}
-        return {
-            "userId": mdc.userId,
-            "geoId": mdc.geoId,
-        }
+        return mdc.model_dump() if isinstance(mdc, BaseModel) else mdc
 
 
 @lru_cache()
