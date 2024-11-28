@@ -6,6 +6,7 @@ import logging
 import sys
 import typing as t
 
+import logfire
 from fastapi import Depends, FastAPI, Request
 from fastapi.openapi.docs import get_redoc_html, get_swagger_ui_html
 from fastapi.responses import HTMLResponse
@@ -47,6 +48,9 @@ def _create_app() -> FastAPI:
 
 
 app = _create_app()
+
+logfire.configure()
+logfire.instrument_fastapi(app)
 
 
 @app.get(

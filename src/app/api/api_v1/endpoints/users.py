@@ -4,6 +4,7 @@ Users REST API
 
 from typing import List
 
+import logfire
 from fastapi import APIRouter, Body, HTTPException, Path, Query, status
 
 from app import schemas
@@ -58,6 +59,8 @@ def read_users(
     logger.error("Retrieving users")
     logger_with_ctx.debug("Retrieving users with context")
     logger.critical("Retrieving users")
+
+    logfire.info("Hello, {name}!", name="world")
     return users
 
 
