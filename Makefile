@@ -1,5 +1,3 @@
-export POETRY_ENABLED := 1
-
 .PHONY: help
 
 SHELL=bash
@@ -33,7 +31,7 @@ build-all: init check coverage
 
 # Run a development server on the host machine.
 run:
-	cd src && poetry run python run_server.py --port 8001 --reload "./"
+	cd src && uv run --locked python run_server.py --port 8001 --reload "./"
 
 # Build prod-ready docker image (lighter than dev img).
 docker-build:

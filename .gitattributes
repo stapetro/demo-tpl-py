@@ -6,7 +6,8 @@
 # Make sure shell scripts always are checked out in Linux format
 # to enable image builds with Docker desktop
 *.sh eol=lf
-poetry.lock eol=lf
+uv.lock eol=lf
+.python-version eol=lf
 
 ###############################################################################
 # Set default behavior for command prompt diff.

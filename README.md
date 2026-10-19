@@ -3,17 +3,9 @@
 # DISCLAIMER
 This boilerplate is used for demo purposes as part of education sessions/trainings. It doesn't include many aspects which should be present in production-ready project setup. However, all the tools around the sample code are configured properly and can be reused in projects.
 # Software requirements
-1. Install [pyenv](https://github.com/pyenv/pyenv) (*Unix) or [pyenv-win](https://github.com/pyenv-win/pyenv-win) (Windows).
-2. Install latest python version as global one via _pyenv_. If you have already an installed Python on a system level, skip this step.
-   ```bash
-   # Commands below illustrate what you need to do as an idea.
-   # Exact commands might change depending on a particular OS.
-   $ pyenv install -l | grep 3.11.5
-   $ pyenv install 3.11.5
-   $ pyenv global 3.11.5
-   ```
-3. Install [Poetry](https://python-poetry.org/docs/) package manager.
-4. Install [make](https://www.gnu.org/software/make/) CLI tool.
+1. Install [uv](https://docs.astral.sh/uv/getting-started/installation/) for Python version and dependency management. A separate Python installation is not required.
+2. Install Bash (Git Bash on Windows) to run the project scripts.
+3. Install [make](https://www.gnu.org/software/make/) CLI tool.
    ```bash
    # Debian-based Linux distro
    $ sudo apt update
@@ -35,6 +27,37 @@ $ make help
 ## Install project dependencies
 ```bash
 $ make init
+```
+This installs the Python version pinned in `.python-version` and creates `.venv`
+with the runtime and development dependencies from `uv.lock`.
+Without Make or Bash, run these commands directly:
+```bash
+$ uv python install
+$ uv sync --locked
+```
+Use `uv run --locked <command>` to run tools in the project environment without
+activating it. Configure your IDE to use the Python interpreter in `.venv`.
+
+## Manage Python and dependencies
+```bash
+# Add runtime or development dependencies (updates pyproject.toml and uv.lock).
+$ uv add <package>
+$ uv add --dev <package>
+# Upgrade locked dependencies within the declared version constraints.
+$ uv lock --upgrade
+$ uv sync --locked
+# Change the project Python version.
+$ uv python pin <version>
+$ uv python install
+$ uv sync --locked
+```
+Commit `.python-version`, `pyproject.toml`, and `uv.lock` when they change.
+Docker builds use the same Python pin and lockfile; the production base image
+installs only runtime dependencies, while the development image includes both groups.
+
+## Install pre-commit hooks
+```bash
+$ uv run --locked pre-commit install
 ```
 ## Format all files
 ```bash

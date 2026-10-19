@@ -54,10 +54,6 @@ class Settings(BaseSettings):
     SMTP_PASSWORD: t.Optional[str] = None
     EMAILS_FROM_EMAIL: t.Optional[EmailStr] = None
     EMAILS_FROM_NAME: t.Optional[str] = None
-    PYDEVD: bool = False
-    PYDEVD_PORT: t.Optional[int] = None
-    PYDEVD_HOST: t.Optional[str] = None
-
     EMAIL_RESET_TOKEN_EXPIRE_HOURS: int = 48
     EMAIL_TEMPLATES_DIR: str = "/app/app/email-templates/build"
     EMAILS_ENABLED: bool = False

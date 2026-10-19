@@ -18,4 +18,4 @@ fi
 # PORT is injected at runtime.
 # add $RUN_SERVER_OPTS which could contain a "--reload" or other configuration options.
 echo "Starting server ..."
-poetry run python3 run_server.py --port ${PORT:-8080} $RUN_SERVER_OPTS
+exec uv run --no-sync python run_server.py --port ${PORT:-8080} $RUN_SERVER_OPTS

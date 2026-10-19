@@ -1,11 +1,48 @@
+[project]
+name = "demo-tpl-py"
+version = "0.1.0"
+description = "Demo template for python backend"
+authors = [{ name = "Stanislav Petrov", email = "stanislav.i.petrov@gmail.com" }]
+requires-python = ">=3.14,<4"
+license = "MIT"
+dependencies = [
+    "ecs-logging>=2.1.0,<3",
+    "fastapi",
+    "httpx[http2]>=0.28.1,<1",
+    "logfire[fastapi]",
+    "passlib[bcrypt]",
+    "pip-system-certs",
+    "pydantic[email]>=2.5.2,<3",
+    "pydantic-settings>=2.0.3,<3",
+    "python-jose[cryptography]",
+    "uvicorn[standard]>=0.44.0,<1",
+]
+
 [tool.black]
 exclude = '(\.git|\.mypy_cache|\.venv)'
 include = '\.pyi?$'
-target-version = ['py312']
+target-version = ['py314']
 line-length = 88
+
+[dependency-groups]
+dev = [
+    "anyio>=4.12.0,<5",
+    "autoflake>=2.0.0",
+    "black[d]>=26.3.0",
+    "isort>=8.0.0",
+    "mypy>=2",
+    "pre-commit>=4.0.1,<5",
+    "pylint>=4.0.0",
+    "pylint-pydantic",
+    "pytest>=9.0.1",
+    "pytest-cov>=7.0.0",
+]
 
 [tool.isort]
 profile = "black"
+
+[tool.uv]
+package = false
 
 [tool.pylint.master]
 extension-pkg-allow-list = ["pydantic"]
@@ -62,42 +99,3 @@ plugins = "pydantic.mypy"
 ignore_missing_imports = "true"
 disallow_untyped_defs = "true"
 show_error_codes = "true"
-
-
-[tool.poetry]
-package-mode = false
-name = "demo-tpl-py"
-version = "0.1.0"
-description = "Demo template for python backend"
-authors = ["Stanislav Petrov <stanislav.i.petrov@gmail.com>"]
-license = "MIT"
-
-[tool.poetry.dependencies]
-python = "^3.12.7"
-fastapi = "^0"
-uvicorn = {version = "^0.32.0", extras = ["standard"]}
-pydantic = {version = "^2.0.2", extras = ["email", "dotenv"]}
-python-jose = {extras = ["cryptography"], version = "^3.3"}
-passlib = {extras = ["bcrypt"], version = "^1.7.4"}
-httpx = "^0"
-pydantic-settings = "^2.0.1"
-ecs-logging = "^2.1.0"
-logfire = {extras = ["fastapi"], version = "^2.5.0"}
-pip-system-certs = "^4.0"
-
-[tool.poetry.group.dev.dependencies]
-black = {version = "^24.2.0", extras = ["d"]}
-isort = "^5.10.1"
-mypy = "~1"
-pylint = "^3.0.0"
-pytest = "^8.0.0"
-pytest-cov = "^6.0.0"
-pydevd-pycharm = ">=232.5150.120"
-autoflake = "^2.0.0"
-anyio = "^4.3.0"
-pre-commit = "^4.0.1"
-pylint-pydantic = "^0.3.0"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"

@@ -9,7 +9,7 @@ repos:
     hooks:
       - id: autoflake
         name: autoflake
-        entry: autoflake
+        entry: uv run --locked autoflake
         language: system
         types: [python]
         args:
@@ -49,7 +49,7 @@ repos:
     hooks:
       - id: mypy
         name: mypy
-        entry: mypy
+        entry: uv run --locked mypy
         language: system
         types: [python]
         exclude: ^(tests)/.*

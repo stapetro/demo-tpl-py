@@ -8,15 +8,15 @@ else
   CHECK_ONLY=""
 fi
 
-$POETRY_OR_NOT autoflake $CHECK_ONLY \
+uv run --locked autoflake $CHECK_ONLY \
   --remove-all-unused-imports --expand-star-imports --remove-duplicate-keys \
   --recursive --remove-unused-variables --ignore-init-module-imports \
   --in-place \
   --exclude=__init__.py \
   "${@}"
-$POETRY_OR_NOT isort $CHECK_ONLY \
+uv run --locked isort $CHECK_ONLY \
   --settings-file=./pyproject.toml \
   "${@}"
-$POETRY_OR_NOT black $CHECK_ONLY \
+uv run --locked black $CHECK_ONLY \
   --config=./pyproject.toml \
   "${@}"

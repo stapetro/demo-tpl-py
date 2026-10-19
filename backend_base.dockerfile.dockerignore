@@ -3,4 +3,5 @@
 
 # Include only:
 !pyproject.toml
-!poetry.lock
+!uv.lock
+!.python-version

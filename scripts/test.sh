@@ -2,4 +2,4 @@
 
 . $(dirname $0)/env_config.sh
 
-$POETRY_OR_NOT pytest -v ./tests "${@}"
+uv run --locked pytest -v ./tests "${@}"
