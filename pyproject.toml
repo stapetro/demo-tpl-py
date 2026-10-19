@@ -82,6 +82,8 @@ passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 httpx = "^0"
 pydantic-settings = "^2.0.1"
 ecs-logging = "^2.1.0"
+logfire = {extras = ["fastapi"], version = "^2.5.0"}
+pip-system-certs = "^4.0"
 
 [tool.poetry.group.dev.dependencies]
 black = {version = "^24.2.0", extras = ["d"]}
