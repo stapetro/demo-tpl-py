@@ -76,7 +76,7 @@ class Settings(BaseSettings):
             and values.get("EMAILS_FROM_EMAIL")
         )
 
-    EMAIL_TEST_USER: EmailStr = "test@example.com"  # type: ignore
+    EMAIL_TEST_USER: EmailStr = Field(default="test@example.com")  # type: ignore
     USERS_OPEN_REGISTRATION: bool = False
 
     API_DOC_ENABLED: t.Optional[bool] = None
