@@ -56,8 +56,14 @@ Docker builds use the same Python pin and lockfile; the production base image
 installs only runtime dependencies, while the development image includes both groups.
 
 ## Install pre-commit hooks
+Install `pre-commit` as a persistent uv tool:
 ```bash
-$ uv run --locked pre-commit install
+$ uv tool install pre-commit
+```
+If the `pre-commit` command is not on your `PATH`, run `uv tool update-shell`
+and restart your shell. Then install the Git hooks for this repository:
+```bash
+$ pre-commit install
 ```
 ## Format all files
 ```bash

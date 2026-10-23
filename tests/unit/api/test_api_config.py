@@ -1,4 +1,4 @@
-""""Test API configurations"""
+"""Test API configurations"""
 
 # pylint: disable=missing-class-docstring,missing-function-docstring,
 # pylint: disable=no-self-use
