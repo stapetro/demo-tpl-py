@@ -9,16 +9,6 @@ import uvicorn
 from app.core.config import LoggingConfig, get_settings
 
 if __name__ == "__main__":
-    if get_settings().PYDEVD:
-        import pydevd_pycharm
-
-        pydevd_pycharm.settrace(
-            get_settings().PYDEVD_HOST,
-            port=get_settings().PYDEVD_PORT,
-            stdoutToServer=True,
-            stderrToServer=True,
-        )
-
     parser = ArgumentParser()
     parser.add_argument(
         "-r",

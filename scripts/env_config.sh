@@ -14,10 +14,3 @@ esac
 [[ "${PYTHONPATH}" =~ "\btests\b" ]] || PYTHONPATH=$PYTHONPATH${path_separator}tests
 
 export PYTHONPATH
-
-if [[ $POETRY_ENABLED ]]
-then
-  export POETRY_OR_NOT="poetry run"
-else
-  export POETRY_OR_NOT=""
-fi

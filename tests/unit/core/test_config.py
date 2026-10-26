@@ -40,21 +40,6 @@ class TestSettings:
                 str,
             ),
             (
-                "PYDEVD",
-                "True",
-                bool,
-            ),
-            (
-                "PYDEVD_PORT",
-                "12345",
-                int,
-            ),
-            (
-                "PYDEVD_HOST",
-                "magicHost",
-                str,
-            ),
-            (
                 "ENV_NAME",
                 "loc-unit-test",
                 str,

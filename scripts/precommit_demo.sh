@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 modified_py_files=$1
 
@@ -37,13 +37,13 @@ if [ -z "$modified_py_files" ]
 then
   echo "pylint and mypy have no work to do."
 else
-  poetry run pylint --rcfile=./pyproject.toml ${modified_py_files} || exit $?
+  uv run --locked pylint --rcfile=./pyproject.toml ${modified_py_files} || exit $?
   modified_src_files=$(echo "${modified_py_files}" | grep "src/")
   if [ -z "$modified_src_files" ]
   then
     echo "No src files to mypy."
   else
-    poetry run mypy ${modified_src_files} || exit $?
+    uv run --locked mypy ${modified_src_files} || exit $?
   fi
 fi
 

@@ -6,7 +6,7 @@ set -e
 . $(dirname $0)/env_config.sh
 
 CHECK_ONLY=1 $(dirname $0)/format_common.sh "${@}"
-$POETRY_OR_NOT pylint --rcfile=./pyproject.toml --reports=y "${@}"
+uv run --locked pylint --rcfile=./pyproject.toml --reports=y "${@}"
 
 # Run type checks only on the main code.
 # Indexed array with files in src/
@@ -19,7 +19,7 @@ for f in "${@}"; do
 done
 
 if [[ $SRC_FILES ]]; then
-  $POETRY_OR_NOT mypy --config-file=./pyproject.toml "${SRC_FILES[@]}"
+  uv run --locked mypy --config-file=./pyproject.toml "${SRC_FILES[@]}"
 else
   echo "No src files to mypy."
 fi

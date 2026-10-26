@@ -54,10 +54,6 @@ class Settings(BaseSettings):
     SMTP_PASSWORD: t.Optional[str] = None
     EMAILS_FROM_EMAIL: t.Optional[EmailStr] = None
     EMAILS_FROM_NAME: t.Optional[str] = None
-    PYDEVD: bool = False
-    PYDEVD_PORT: t.Optional[int] = None
-    PYDEVD_HOST: t.Optional[str] = None
-
     EMAIL_RESET_TOKEN_EXPIRE_HOURS: int = 48
     EMAIL_TEMPLATES_DIR: str = "/app/app/email-templates/build"
     EMAILS_ENABLED: bool = False
@@ -76,7 +72,7 @@ class Settings(BaseSettings):
             and values.get("EMAILS_FROM_EMAIL")
         )
 
-    EMAIL_TEST_USER: EmailStr = "test@example.com"  # type: ignore
+    EMAIL_TEST_USER: EmailStr = Field(default="test@example.com")  # type: ignore
     USERS_OPEN_REGISTRATION: bool = False
 
     API_DOC_ENABLED: t.Optional[bool] = None
