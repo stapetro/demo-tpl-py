@@ -14,30 +14,29 @@ This boilerplate is used for demo purposes as part of education sessions/trainin
    OR
    ```powershell
    # Windows
-   $ choco install make
+   $ scoop install make
    ```
 # Initial setup
-1. Clone the repository.
-2. Execute ```make build-all```.
-# Build process digested into step by step
-You can see all steps documented with the following command:
-```bash
-$ make help
-```
-## Install project dependencies
-```bash
-$ make init
-```
 This installs the Python version pinned in `.python-version` and creates `.venv`
 with the runtime and development dependencies from `uv.lock`.
 Without Make or Bash, run these commands directly:
 ```bash
 $ uv python install
-$ uv sync --locked
+$ uv venv --clear --seed
 ```
-Use `uv run --locked <command>` to run tools in the project environment without
+## Install project dependencies
+```bash
+$ make init
+```
+
+Use `uv run <command>` to run tools in the project environment without
 activating it. Configure your IDE to use the Python interpreter in `.venv`.
 
+# Build process digested into step by step
+You can see all steps documented with the following command:
+```bash
+$ make help
+```
 ## Manage Python and dependencies
 ```bash
 # Add runtime or development dependencies (updates pyproject.toml and uv.lock).
@@ -55,6 +54,12 @@ Commit `.python-version`, `pyproject.toml`, and `uv.lock` when they change.
 Docker builds use the same Python pin and lockfile; the production base image
 installs only runtime dependencies, while the development image includes both groups.
 
+## Project version
+Update the root `VERSION` file to change the project version. Hatchling reads this
+file for dynamic package metadata.
+The project remains configured with `package = false`, so `uv sync` does not
+install the application itself.
+
 ## Install pre-commit hooks
 Install `pre-commit` as a persistent uv tool:
 ```bash
@@ -63,7 +68,7 @@ $ uv tool install pre-commit
 If the `pre-commit` command is not on your `PATH`, run `uv tool update-shell`
 and restart your shell. Then install the Git hooks for this repository:
 ```bash
-$ pre-commit install
+$ uv run pre-commit install
 ```
 ## Format all files
 ```bash

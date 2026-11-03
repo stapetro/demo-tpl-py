@@ -29,8 +29,12 @@ class TestRoot:
         url_path: str,
         expected_status_code: int,
     ) -> None:
-        async with api_client:
-            response = await api_client.get(url_path)
+        with mock.patch("app.api.api_v1.auth.get_settings") as mock_get_settings:
+            mock_get_settings.return_value = mock.Mock(
+                API_DOC_ENABLED=None, ENV_NAME="tst-unit"
+            )
+            async with api_client:
+                response = await api_client.get(url_path)
 
         assert response.status_code == expected_status_code
 

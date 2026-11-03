@@ -1,5 +1,6 @@
 # pylint: disable=missing-module-docstring,missing-function-docstring,
 # pylint: disable=missing-class-docstring,no-self-use
+import typing as t
 from unittest import mock
 
 import pytest
@@ -15,9 +16,9 @@ pytestmark = pytest.mark.unit
 
 @pytest.mark.anyio
 class TestApiDocSecurity:
-    @staticmethod
     @pytest.fixture(scope="class")
-    def mock_http_basic_cls() -> HTTPBasic:
+    @staticmethod
+    def mock_http_basic_cls() -> t.Generator[mock.MagicMock, None, None]:
         with mock.patch("app.api.api_v1.auth.HTTPBasic") as mock_http_basic:
             yield mock_http_basic
 
@@ -30,7 +31,7 @@ class TestApiDocSecurity:
     )
     async def test_api_doc_disabled(
         self,
-        mock_http_basic_cls: HTTPBasic,
+        mock_http_basic_cls: mock.MagicMock,
         env_name: str,
         api_doc_enabled: bool,
         realm: str,

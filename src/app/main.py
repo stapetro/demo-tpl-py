@@ -115,7 +115,7 @@ app_logger.parent = logging.getLogger("uvicorn")
 app_logger.setLevel(logging.DEBUG)
 
 
-if get_settings().ENV_NAME == "loc":  # pragma: no cover
+if get_settings().ENV_NAME == "local":  # pragma: no cover
     app_handler = logging.StreamHandler(stream=sys.stderr)
     app_handler.setFormatter(
         DefaultFormatter(fmt="%(levelprefix)s %(message)s labels=%(labels)s")

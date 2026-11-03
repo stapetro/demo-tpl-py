@@ -1,4 +1,4 @@
-ENV_NAME=dev-local
+ENV_NAME=local
 PROJECT_NAME=demo-template-py
 API_DOC_ENABLED=True
 API_DOC_USER=

@@ -24,9 +24,9 @@ URL_3 = "http://localhost:3000"
 @pytest.mark.anyio
 class TestApiCors:
 
-    @classmethod
     @pytest.fixture
-    def cors_api_client(cls) -> t.Generator:
+    @staticmethod
+    def cors_api_client() -> t.Generator:
         with mock.patch(
             "app.main.get_settings",
             return_value=config.Settings(BACKEND_CORS_ORIGINS=[URL_1, URL_2, URL_3]),
