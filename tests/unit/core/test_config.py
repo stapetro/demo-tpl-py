@@ -15,6 +15,7 @@ from _pytest.fixtures import FixtureRequest
 from pydantic import AnyHttpUrl, BaseModel, SecretStr, ValidationError
 
 from app.core.config import (
+    ENV_NAME_LOCAL,
     AccessEcsLogFormatter,
     LoggerFactory,
     LoggingConfig,
@@ -157,7 +158,7 @@ class TestSettings:
 @pytest.mark.unit
 class TestLoggingConfig:
     def test_get_config__loc_env(self):
-        env_name = "loc"
+        env_name = ENV_NAME_LOCAL
         log_config = LoggingConfig.get_config(env_name)
 
         assert log_config is uvicorn.config.LOGGING_CONFIG
@@ -240,7 +241,7 @@ class TestLoggerFactory:
         assert caplog.messages[0] == expected_msg
         assert len(caplog.records) == 1
         actual_record = caplog.records[0]
-        assert actual_record.labels == {}
+        assert getattr(actual_record, "labels") == {}
 
     @pytest.mark.parametrize(
         "mdc",
@@ -248,7 +249,7 @@ class TestLoggerFactory:
             SomeCtx(**{"userId": "abc123", "geoId": "def456"}),
             {"userId": "321bca", "geoId": "789"},
         ],
-        ids=["context object", "context dict"],
+        ids=["context pydantic object", "context dict"],
     )
     def test_get_logger__with_context(self, caplog, mdc):
         expected_msg = "Dummy message"
@@ -260,8 +261,8 @@ class TestLoggerFactory:
         assert caplog.messages[0] == expected_msg
         assert len(caplog.records) == 1
         actual_record = caplog.records[0]
-        assert actual_record.labels is not None
-        self._compare_labels_with_ctx(actual_record.labels, mdc)
+        assert getattr(actual_record, "labels") is not None
+        self._compare_labels_with_ctx(getattr(actual_record, "labels"), mdc)
 
     @pytest.mark.parametrize(
         "initial_logger_create_fn",
@@ -277,7 +278,7 @@ class TestLoggerFactory:
             SomeCtx(**{"userId": "abc123", "geoId": "def456"}),
             {"userId": "321bca", "geoId": "789"},
         ],
-        ids=["context object", "context dict"],
+        ids=["context pydantic object", "context dict"],
     )
     def test_wrap_logger_with_ctx__ctx(
         self,
@@ -299,14 +300,14 @@ class TestLoggerFactory:
         assert caplog.messages[0] == expected_msg_1
         actual_record_1 = caplog.records[0]
         if isinstance(initial_logger, logging.LoggerAdapter):
-            assert len(actual_record_1.labels) == 0
+            assert len(getattr(actual_record_1, "labels")) == 0
         else:
             with pytest.raises(AttributeError):
-                _ = actual_record_1.labels
+                _ = getattr(actual_record_1, "labels")
         assert caplog.messages[1] == expected_msg_2
         actual_record_2 = caplog.records[1]
-        assert actual_record_2.labels is not None
-        self._compare_labels_with_ctx(actual_record_2.labels, mdc)
+        assert getattr(actual_record_2, "labels") is not None
+        self._compare_labels_with_ctx(getattr(actual_record_2, "labels"), mdc)
 
     @classmethod
     def _compare_labels_with_ctx(

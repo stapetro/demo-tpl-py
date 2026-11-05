@@ -29,7 +29,7 @@ class ApiDocSecurity:
         )
 
     async def __call__(self, request: Request) -> t.Optional[str]:
-        if get_settings().API_DOC_ENABLED is not True:
+        if not get_settings().API_DOC_ENABLED:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Not Found",

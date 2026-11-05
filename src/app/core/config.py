@@ -20,6 +20,8 @@ from pydantic import (
 from pydantic_core.core_schema import ValidationInfo
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+ENV_NAME_LOCAL = "local"
+
 
 class Settings(BaseSettings):
     # pylint: disable=missing-class-docstring
@@ -155,7 +157,7 @@ class LoggingConfig:
         :param env_name: Environment name
         :return: Logging configuration
         """
-        if env_name == "loc":
+        if env_name == ENV_NAME_LOCAL:
             return uvicorn.config.LOGGING_CONFIG
         return cls.ECS_UVICORN_LOGGING_CONFIG
 

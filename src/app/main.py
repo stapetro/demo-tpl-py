@@ -15,7 +15,7 @@ from uvicorn.logging import DefaultFormatter
 
 from app.api.api_v1.api import api_router
 from app.api.api_v1.auth import api_doc_security
-from app.core.config import get_settings
+from app.core.config import ENV_NAME_LOCAL, get_settings
 
 
 def _setup_cors(p_app: FastAPI) -> None:
@@ -115,7 +115,7 @@ app_logger.parent = logging.getLogger("uvicorn")
 app_logger.setLevel(logging.DEBUG)
 
 
-if get_settings().ENV_NAME == "local":  # pragma: no cover
+if get_settings().ENV_NAME == ENV_NAME_LOCAL:  # pragma: no cover
     app_handler = logging.StreamHandler(stream=sys.stderr)
     app_handler.setFormatter(
         DefaultFormatter(fmt="%(levelprefix)s %(message)s labels=%(labels)s")

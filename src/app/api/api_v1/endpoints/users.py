@@ -6,6 +6,7 @@ from typing import List
 
 import logfire
 from fastapi import APIRouter, Body, HTTPException, Path, Query, status
+from fastapi.openapi.models import Example
 
 from app import schemas
 from app.core.config import LoggerFactory, SomeCtx
@@ -96,7 +97,7 @@ def create_user(
 def read_user_by_id(
     user_id: int = Path(
         description="User id",
-        openapi_examples={"1": {"value": 1}},
+        openapi_examples={"1": Example(value=1)},
     ),
 ) -> schemas.User:
     """
@@ -124,7 +125,7 @@ def update_user(
     *,
     user_id: int = Path(
         description="User id",
-        openapi_examples={"1": {"value": 1}},
+        openapi_examples={"1": Example(value=1)},
     ),
     user_in: schemas.UserUpdate = Body(description="User data to update"),
 ) -> schemas.User:
