@@ -2,7 +2,7 @@
 # Build context: ./
 FROM debian:bookworm-slim
 
-COPY --from=ghcr.io/astral-sh/uv:0.13.6 /uv /uvx /usr/local/bin/
+COPY --from=ghcr.io/astral-sh/uv:0.13.8 /uv /uvx /usr/local/bin/
 
 ENV DIR_HOME=/non-root
 ENV DIR_APP=${DIR_HOME}/app
